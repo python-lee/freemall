@@ -24,7 +24,7 @@
       <div class="navbar">
         <div class="navbar-left-container">
           <a href="/">
-            <img class="navbar-brand-logo" src="/logo.png"></a>
+            <img class="navbar-brand-logo" src="/imgs/logo.png"></a>
         </div>
         <div class="navbar-right-container" style="display: flex;">
           <a href="https://www.imooc.com/u/1343480" target="_blank" class="navbar-link">河畔一角</a>
