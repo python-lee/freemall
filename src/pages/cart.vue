@@ -84,7 +84,7 @@
 								</div>
 								<div class="cart-tab-5">
 									<div class="cart-item-opration">
-										<a href="javascript:;" class="item-edit-btn">
+										<a href="javascript:;" class="item-edit-btn" @click='delCartConfirm(item)'>
 											<svg class="icon icon-del">
 												<use xlink:href="#icon-del"></use>
 											</svg>
@@ -121,25 +121,35 @@
 			</div>
 		</div>
 		<nav-footer></nav-footer>
+		<modal :mdShow='modalConfirm' @close='closeModal'>
+			<p slot='message'>你确认要删除词条数据吗?</p>
+			<div slot='btnGroup'>
+				<a class='btn btn--m' href='javascript:;'>确认</a>
+				<a class='btn btn--m btn--red' href='javascript:;'>取消</a>
+				<a></a>
+			</div>
+		</modal>
 	</div>
 </template>
 
 <script>
 	import NavHeader from './../components/Header.vue'
 	import NavFooter from './../components/Footer.vue'
-	// import Modal from './../components/Modal.vue'
+	import Modal from './../components/Modal.vue'
 	// import axios from 'axios'
 	export default {
 		name: 'cart',
 		data(){
 			return {
+				modalConfirm: false,
+				delItem: '',
 				cartList: []
 			}
 		},
 		components:{
 			NavHeader,
 			NavFooter,
-			// Modal
+			modal: Modal
 		},
 		mounted(){
 			this.init(); // 初始化购物车列表
@@ -166,6 +176,13 @@
 				} else {
 					item.checked = !item.checked;
 				}
+			},
+			delCartConfirm(item) {
+				this.delItem = item;
+				this.modalConfirm = true;
+			},
+			closeModal () {
+				this.modalConfirm = false;
 			}
 		}
 	}
