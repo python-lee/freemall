@@ -122,12 +122,13 @@
 		</div>
 		<nav-footer></nav-footer>
 		<modal :mdShow='modalConfirm' @close='closeModal'>
-			<p slot='message'>你确认要删除词条数据吗?</p>
-			<div slot='btnGroup'>
-				<a class='btn btn--m' href='javascript:;'>确认</a>
-				<a class='btn btn--m btn--red' href='javascript:;'>取消</a>
-				<a></a>
-			</div>
+			<template v-slot:message>
+				<p slot='message'>你确认要删除词条数据吗?</p>
+			</template>
+			<template v-slot:btnGroup>
+				<a class='btn btn--m' href='javascript:;' @click='delCart'>确认</a>
+				<a class='btn btn--m btn--red' href='javascript:;' @click='modalConfirm=false'>取消</a>
+			</template>
 		</modal>
 	</div>
 </template>
@@ -183,6 +184,15 @@
 			},
 			closeModal () {
 				this.modalConfirm = false;
+			},
+			delCart(){
+				let delItem = this.delItem;
+				this.cartList.forEach((item, index) => {
+					if (item.productid === delItem.productid) {
+						this.cartList.splice(index, 1);
+						this.modalConfirm = false;
+					}
+				})
 			}
 		}
 	}

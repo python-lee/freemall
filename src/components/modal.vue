@@ -15,7 +15,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- <div class="md-overlay"></div> -->
+		<div class="md-overlay" v-if='mdShow' @click="closeModal"></div>
 	</div>
 </template>
 
