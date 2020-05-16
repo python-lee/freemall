@@ -99,8 +99,8 @@
 					<div class="cart-foot-inner">
 						<div class="cart-foot-l">
 							<div class="item-all-check">
-								<a href="javascipt:;">
-									<span class="checkbox-btn item-check-btn check">
+								<a href="javascipt:;" @click='checkAll'>
+									<span class="checkbox-btn item-check-btn" :class='{"checked":checkAllFlag}'>
 										<svg class="icon icon-ok">
 											<use xlink:href="#icon-ok" /></svg>
 									</span>
@@ -155,6 +155,13 @@
 		mounted(){
 			this.init(); // 初始化购物车列表
 		},
+		computed:{
+			checkAllFlag(){
+				return this.cartList.every((item)=>{
+					return item.checked;
+				})
+			}
+		},
 		filters: {
 			currency(value){
 				if(!value)return 0.00;
@@ -192,6 +199,12 @@
 						this.cartList.splice(index, 1);
 						this.modalConfirm = false;
 					}
+				})
+			},
+			checkAll(){
+				let flag = !this.checkAllFlag;
+				this.cartList.forEach((item)=>{
+					item.checked = flag;
 				})
 			}
 		}
