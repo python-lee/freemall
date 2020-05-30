@@ -66,7 +66,7 @@
 									</div>
 								</div>
 								<div class="cart-tab-2">
-									<div class="item-price">89</div>
+									<div class="item-price">{{item.productPrice}}</div>
 								</div>
 								<div class="cart-tab-3">
 									<div class="item-quantity">
@@ -110,10 +110,10 @@
 						</div>
 						<div class="cart-foot-r">
 							<div class="item-total">
-								总价: <span class="total-price">￥89.00元</span>
+								总价: <span class="total-price">{{totalPrice | currency}}</span>
 							</div>
 							<div class="btn-wrap">
-								<a class="btn btn--red btn--dis">结算</a>
+								<a class="btn btn--red" :class="{'btn--dis': !checkedCount}" @click="checkOut">结算</a>
 							</div>
 						</div>
 					</div>
@@ -160,6 +160,22 @@
 				return this.cartList.every((item)=>{
 					return item.checked;
 				})
+			},
+			// 判断购物车中是否有选中的商品
+			checkedCount(){
+				return this.cartList.some((item) => {
+					return item.checked;
+				})
+			},
+			// 计算购物车中商品的总价
+			totalPrice(){
+				let money = 0;
+				this.cartList.forEach((item)=>{
+					if (item.checked) {
+						money += item.productPrice*item.productNum;
+					}
+				})
+				return money;
 			}
 		},
 		filters: {
@@ -206,6 +222,13 @@
 				this.cartList.forEach((item)=>{
 					item.checked = flag;
 				})
+			},
+			checkOut(){
+				if (this.checkedCount){
+					this.$router.push({
+						path: '/address'
+					})
+				}
 			}
 		}
 	}

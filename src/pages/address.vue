@@ -139,13 +139,24 @@
 		name: 'addr',
 		data() {
 			return {
-
+				addressList: []
 			}
 		},
 		components: {
 			NavHeader,
 			NavFooter,
 			// Modal
+		},
+		created(){
+			this.init();
+		},
+		methods: {
+			init(){
+				this.axios.get('/mock/address.json').then((response) => {
+					let res = response.data;
+					this.addressList = res.data;
+				})
+			}
 		}
 	}
 </script>
