@@ -123,7 +123,7 @@
 		<nav-footer></nav-footer>
 		<modal :mdShow='modalConfirm' @close='closeModal'>
 			<template v-slot:message>
-				<p slot='message'>你确认要删除词条数据吗?</p>
+				<p slot='message'>你确认要删除该条数据吗?</p>
 			</template>
 			<template v-slot:btnGroup>
 				<a class='btn btn--m' href='javascript:;' @click='delCart'>确认</a>

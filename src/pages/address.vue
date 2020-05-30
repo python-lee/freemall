@@ -60,7 +60,7 @@
 					<div class="addr-list-wrap">
 						<div class="addr-list">
 							<ul>
-								<li class="check" v-for="item in addressFilter" :key=item.addressId>
+								<li :class="{'check': checkedIndex === index}" v-for="(item, index) in addressFilter" :key=item.addressId @click="checkedIndex=index">
 									<dl>
 										<dt>{{item.userName}}</dt>
 										<dd class="address">{{item.streetName}}</dd>
@@ -68,16 +68,16 @@
 									</dl>
 									<div class="addr-opration addr-del">
 										<!-- 删除地址 -->
-										<a href="javascript:;" class="addr-del-btn">
+										<a href="javascript:;" class="addr-del-btn" @click="delAddressConfirm(item.addressId)">
 											<svg class="icon icon-del">
 												<use xlink:href="#icon-del"></use>
 											</svg>
 										</a>
 									</div>
-									<div class="addr-opration addr-set-default">
-										<a href="javascript:;" class="addr-set-default-btn"><i>设为默认</i></a>
+									<div class="addr-opration addr-set-default" v-if="!item.isDefault">
+										<a href="javascript:;" class="addr-set-default-btn" @click="setDefault(item.addressId)"><i>设为默认</i></a>
 									</div>
-									<div class="addr-opration addr-default">默认地址</div>
+									<div class="addr-opration addr-default" v-if="item.isDefault">默认地址</div>
 								</li>
 
 								<li class="addr-new">
@@ -122,31 +122,42 @@
 						</div>
 					</div>
 					<div class="next-btn-wrap">
-						<a class="btn btn--m btn--red" href="#">下一步</a>
+						<a class="btn btn--m btn--red" href="javascript:;" @click="next">下一步</a>
 					</div>
 				</div>
 			</div>
 		</div>
+		
 		<nav-footer></nav-footer>
+		<modal :mdShow="modalConfirm" @close="modalConfirm=false">
+			<template v-slot:message>
+				<p slot='message'>更多实战讲解，请前往慕课网学习新《Vue全家桶从零打造小米商城》?</p>
+			</template>
+			<template v-slot:btnGroup>
+				<a class='btn btn--m btn--red' href='javascript:;' @click='modalConfirm=false'>取消</a>
+			</template>
+		</modal>
 	</div>
 </template>
 
 <script>
 	import NavHeader from './../components/Header.vue'
 	import NavFooter from './../components/Footer.vue'
-	// import Modal from './../components/Modal.vue'
+	import Modal from './../components/Modal.vue'
 	export default {
 		name: 'addr',
 		data() {
 			return {
+				modalConfirm: false,
 				limit: 3,
+				checkedIndex: 0,
 				addressList: []
 			}
 		},
 		components: {
 			NavHeader,
 			NavFooter,
-			// Modal
+			modal: Modal
 		},
 		computed: {
 			addressFilter(){
@@ -161,6 +172,11 @@
 				this.axios.get('/mock/address.json').then((response) => {
 					let res = response.data;
 					this.addressList = res.data;
+					res.data.forEach((item, index) => {
+						if (item.default) {
+							this.checkIndex = index;
+						}
+					})
 				})
 			},
 			expand(){
@@ -169,6 +185,25 @@
 				} else {
 					this.limit = 3;
 				}
+			},
+			setDefault(addressId){
+				this.addressList.map((item) => {
+					if (addressId === item.addressId){
+						item.isDefault = true;
+					} else {
+						item.isDefault = false;
+					}
+				})
+			},
+			delAddressConfirm(addressId){
+				this.addressList.map((item,index) => {
+					if (addressId === item.addressId) {
+						this.addressList.splice(index,1)
+					}
+				})
+			},
+			next(){
+				this.modalConfirm = true;
 			}
 		}
 	}
