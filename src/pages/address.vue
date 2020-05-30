@@ -60,11 +60,11 @@
 					<div class="addr-list-wrap">
 						<div class="addr-list">
 							<ul>
-								<li class="check">
+								<li class="check" v-for="item in addressFilter" :key=item.addressId>
 									<dl>
-										<dt>河畔一角</dt>
-										<dd class="address">北京市昌平区</dd>
-										<dd class="tel">17600000000</dd>
+										<dt>{{item.userName}}</dt>
+										<dd class="address">{{item.streetName}}</dd>
+										<dd class="tel">{{item.tel}}</dd>
 									</dl>
 									<div class="addr-opration addr-del">
 										<!-- 删除地址 -->
@@ -94,7 +94,7 @@
 						</div>
 
 						<div class="shipping-addr-more">
-							<a class="addr-more-btn up-down-btn open" href="javascript:;">
+							<a class="addr-more-btn up-down-btn" href="javascript:;" :class="{'open': limit > 3}" @click="expand">
 								查看更多
 								<i class="i-up-down">
 									<i class="i-up-down-l"></i>
@@ -139,6 +139,7 @@
 		name: 'addr',
 		data() {
 			return {
+				limit: 3,
 				addressList: []
 			}
 		},
@@ -146,6 +147,11 @@
 			NavHeader,
 			NavFooter,
 			// Modal
+		},
+		computed: {
+			addressFilter(){
+				return this.addressList.slice(0, this.limit);
+			}
 		},
 		created(){
 			this.init();
@@ -156,6 +162,13 @@
 					let res = response.data;
 					this.addressList = res.data;
 				})
+			},
+			expand(){
+				if (this.limit === 3) {
+					this.limit = this.addressList.length;
+				} else {
+					this.limit = 3;
+				}
 			}
 		}
 	}
